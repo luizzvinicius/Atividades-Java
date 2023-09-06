@@ -29,7 +29,7 @@ public class Entrada implements AutoCloseable {
             try {
                 return Integer.parseInt(num);
             } catch (NumberFormatException e) {
-                System.out.printf("Número inteiro inválido. %s\n\n", e.getMessage());
+                System.out.printf("Número inteiro inválido. %s%n%n", e.getMessage());
             }
         }
     }
@@ -41,23 +41,20 @@ public class Entrada implements AutoCloseable {
             try {
                 return Double.parseDouble(num);
             } catch (NumberFormatException e) {
-                System.out.printf("Número real inválido. %s\n\n", e.getMessage());
+                System.out.printf("Número real inválido. %s%n%n", e.getMessage());
             }
         }
     }
 
     public int lerOption(String msg, int min, int max) {
+        int num;
         while (true) {
-            System.out.print(msg);
-            var num = this.scan.nextLine().strip();
+            num = this.lerInt(msg);
             try {
-                var numFormatado = Integer.parseInt(num);
-                if (numFormatado < min || numFormatado > max) {
+                if (num < min || num > max) {
                     throw new IllegalArgumentException("Opção Inválida.\n");
                 }
-                return numFormatado;
-            } catch (NumberFormatException e) {
-                System.out.printf("Número inteiro inválido. %s\n\n", e.getMessage());
+                return num;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
