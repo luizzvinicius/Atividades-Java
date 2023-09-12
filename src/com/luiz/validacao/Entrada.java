@@ -1,4 +1,4 @@
-package com.luiz.fundamentos.validacao;
+package com.luiz.validacao;
 
 import java.util.Scanner;
 

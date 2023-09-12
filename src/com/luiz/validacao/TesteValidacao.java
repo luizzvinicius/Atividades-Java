@@ -1,4 +1,4 @@
-package com.luiz.fundamentos.validacao;
+package com.luiz.validacao;
 
 public class TesteValidacao {
     public static void main(String[] args) {
