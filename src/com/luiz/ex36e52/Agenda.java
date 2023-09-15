@@ -1,6 +1,9 @@
-package com.luiz.ex036;
+package com.luiz.ex36e52;
 
 import java.util.List;
+
+import com.luiz.ex36e52.exceptions.ContatoNaoExisteException;
+
 import java.util.ArrayList;
 
 public class Agenda {
@@ -26,14 +29,14 @@ public class Agenda {
         return builder.toString();
     }
 
-    public String mostrarContatos(String nome) {
+    public String mostrarContatos(String nomeContato) throws ContatoNaoExisteException {
         for (Contato contato : this.contatos) {
-            if (contato.nome().equals(nome)) {
+            if (contato.nome().equals(nomeContato)) {
                 return contato.toString();                
             }
         }
         
-        return String.format("Contato %s não existe na %s", nome, this.nome);
+        throw new ContatoNaoExisteException(nomeContato, this.nome);
     }
 
     public void addContato(Contato contato) {

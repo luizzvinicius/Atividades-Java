@@ -1,5 +1,6 @@
-package com.luiz.ex036;
+package com.luiz.ex36e52;
 
+import com.luiz.ex36e52.exceptions.ContatoNaoExisteException;
 import com.luiz.validacao.Entrada;
 
 public class TesteAgenda {
@@ -18,7 +19,13 @@ public class TesteAgenda {
                 contato = new Contato("Luiz"+i, "82 99333-908"+i, "luiz"+i+"@email.com");
                 agenda1.addContato(contato);
             }
-                        
+            
+            try {
+                agenda1.mostrarContatos("Gal Gadot");
+            } catch (ContatoNaoExisteException e) {
+                System.out.println(e.getMessage() + "\n");
+            }
+            
             System.out.println(agenda1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
