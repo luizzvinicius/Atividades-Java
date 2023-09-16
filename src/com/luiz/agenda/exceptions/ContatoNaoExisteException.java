@@ -1,4 +1,4 @@
-package com.luiz.ex36e52.exceptions;
+package com.luiz.agenda.exceptions;
 
 public class ContatoNaoExisteException extends Exception {
     private String nome;

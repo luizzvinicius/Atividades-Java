@@ -1,8 +1,8 @@
-package com.luiz.ex36e52;
+package com.luiz.agenda;
 
 import java.util.List;
 
-import com.luiz.ex36e52.exceptions.ContatoNaoExisteException;
+import com.luiz.agenda.exceptions.ContatoNaoExisteException;
 
 import java.util.ArrayList;
 

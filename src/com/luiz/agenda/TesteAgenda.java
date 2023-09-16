@@ -1,8 +1,8 @@
-package com.luiz.ex36e52;
+package com.luiz.agenda;
 
-import com.luiz.ex36e52.exceptions.ContatoNaoExisteException;
+import com.luiz.agenda.exceptions.ContatoNaoExisteException;
 import com.luiz.validacao.Entrada;
-
+// Exercícios 36 e 52 Loiane
 public class TesteAgenda {
     public static void main(String[] args) {
         try (Entrada scan = new Entrada()) {
