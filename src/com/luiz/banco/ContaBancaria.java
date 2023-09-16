@@ -1,4 +1,4 @@
-package com.luiz.ex43;
+package com.luiz.banco;
 
 public abstract class ContaBancaria {
     protected String nomeCliente;
