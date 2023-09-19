@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-bin/com/luiz/collections/*.png
+bin
 
 # Log file
 *.log
