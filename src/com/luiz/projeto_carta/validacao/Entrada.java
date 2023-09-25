@@ -1,6 +1,7 @@
 package com.luiz.projeto_carta.validacao;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Entrada implements AutoCloseable {
     private Scanner scan;
@@ -14,7 +15,7 @@ public class Entrada implements AutoCloseable {
         while (true) {
             System.out.print(msg);
             palavra = this.scan.nextLine().strip();
-            if (palavra.isEmpty() || !Character.isLetter(palavra.charAt(0))) {
+            if (palavra.isEmpty() || !Pattern.matches("^[a-zA-ZÀ-ÿ\s]+$", palavra)) {
                 System.out.println(erroMessage + "\n");
                 continue;
             }
