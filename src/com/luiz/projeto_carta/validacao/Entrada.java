@@ -15,7 +15,7 @@ public class Entrada implements AutoCloseable {
         while (true) {
             System.out.print(msg);
             palavra = this.scan.nextLine().strip();
-            if (palavra.isEmpty() || !Pattern.matches("^[a-zA-ZÀ-ÿ\s]+$", palavra)) {
+            if (!Pattern.matches("^[a-zA-ZÀ-ÿ\s]+$", palavra)) {
                 System.out.println(erroMessage + "\n");
                 continue;
             }
