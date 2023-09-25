@@ -35,18 +35,6 @@ public class Entrada implements AutoCloseable {
         }
     }
 
-    public double lerDouble(String msg) {
-        while (true) {
-            System.out.print(msg);
-            var num = this.scan.nextLine().strip().replace(",", ".");
-            try {
-                return Double.parseDouble(num);
-            } catch (NumberFormatException e) {
-                System.out.printf("Número real inválido. %s%n%n", e.getMessage());
-            }
-        }
-    }
-
     public int lerOption(String msg, int min, int max, String erroMessage) {
         int num;
         while (true) {
