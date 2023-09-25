@@ -31,8 +31,7 @@ public final class Jogador {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("Jogador [nome=");
-        builder.append(nome).append(", pontuacao=").append(pontuacao).append("]");
+        StringBuilder builder = new StringBuilder(nome);
         return builder.toString();
     }
 }
