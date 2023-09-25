@@ -1,13 +1,9 @@
 package com.luiz.projeto_carta;
 
 public final class CartaValor extends Carta {
-    public CartaValor() {
-        super();
-    }
-    
     @Override
     public int calculaValor() {
-        return isPrime(this.numero) ? super.calculaValor() * 3 : super.calculaValor();
+        return this.isPrime(this.numero) ? super.calculaValor() * 3 : super.calculaValor();
     }
 
     private boolean isPrime(int num) {
