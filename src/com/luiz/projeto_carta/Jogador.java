@@ -2,6 +2,7 @@ package com.luiz.projeto_carta;
 
 public final class Jogador {
     private String nome;
+    private Carta carta;
     private int pontuacao;
 
     public Jogador(String nome) {
@@ -10,6 +11,14 @@ public final class Jogador {
 
     public String getNome() {
         return nome;
+    }
+
+    public Carta getCarta() {
+        return carta;
+    }
+
+    public void setCarta(Carta carta) {
+        this.carta = carta;
     }
 
     public int getPontuacao() {
