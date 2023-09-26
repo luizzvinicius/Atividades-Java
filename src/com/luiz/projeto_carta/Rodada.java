@@ -13,8 +13,8 @@ public class Rodada {
     public Rodada(List<Jogador> jogadores, int tipoCarta, int qtdPartidas) {
         this.jogadores = jogadores;
         this.tipoCarta = tipoCarta;
-        this.cartasRodada = new ArrayList<>();
         this.qtdPartidas = qtdPartidas;
+        this.cartasRodada = new ArrayList<>();
     }
 
     public void iniciar() {
@@ -50,29 +50,29 @@ public class Rodada {
             System.out.printf("%-10s recebeu um(a) %-17s %d%n", jogador, jogador.getCarta(), jogador.getCarta().getValor());
         }
 
-        var vencedor = this.jogadorVencedor();
+        var maiorPontuacao = this.distribuirPontos();
         System.out.print("Vencedor da rodada: ");
-        vencedor.forEach(jogador -> System.out.println(jogador + " "));
+        maiorPontuacao.forEach(jogador -> System.out.println(jogador + " "));
         System.out.println();
     }
 
-    public List<Jogador> jogadorVencedor() {
-        List<Jogador> maiorPontuacao = new ArrayList<>();
+    public List<Jogador> distribuirPontos() {
+        List<Jogador> jogadoresMaiorPontuacao = new ArrayList<>();
         var maiorCarta = this.jogadores.get(0).getCarta().getValor();
         
         int pontos = 3;
         for (Jogador jogador: this.jogadores) {
             if (jogador.getCarta().getValor() == maiorCarta) {
                 jogador.setPontuacao(jogador.getPontuacao() + pontos);
-                maiorPontuacao.add(jogador);
+                jogadoresMaiorPontuacao.add(jogador);
             } else {
                 pontos--;
-                if (pontos == 0) pontos = 1;
+                if (pontos == 0) pontos = 1; // Caso tenha 4+ jogadores, reseta pontos para 1
                 jogador.setPontuacao(jogador.getPontuacao() + pontos);
                 maiorCarta = jogador.getCarta().getValor();
             }
         }
-        return maiorPontuacao;
+        return jogadoresMaiorPontuacao;
     }
 
     public void placar() {
