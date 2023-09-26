@@ -10,8 +10,8 @@ public class Main {
             int nJogadores = scan.lerOption("Quantos jogadores? ", 2, 4, "Quantidade inválida (Máximo 4)");
             List<Jogador> jogadores = new ArrayList<>();
             
-            for (int i = 0; i < nJogadores; i++) {
-                var nome = scan.lerString("Nome do " + (i+1) + "º jogador (sem acentos): ", "Nome inválido");
+            for (int i = 1; i < nJogadores + 1; i++) {
+                var nome = scan.lerString("Nome do " + i + "º jogador (sem acentos): ", "Nome inválido");
                 jogadores.add(new Jogador(nome));
             }
 
@@ -21,7 +21,6 @@ public class Main {
             
             var rodada = new Rodada(jogadores, tipoCarta, qtdPartidas);
             rodada.iniciar();
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
