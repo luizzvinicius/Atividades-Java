@@ -31,7 +31,6 @@ public final class Jogador {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(nome);
-        return builder.toString();
+        return this.nome;
     }
 }
