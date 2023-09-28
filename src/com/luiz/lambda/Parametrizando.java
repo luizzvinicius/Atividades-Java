@@ -7,31 +7,32 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Parametrizando {
-    static record Carro(String marca, String cor, int ano) {
-    }
-
     public static void main(String[] args) {
+        record Carro(String marca, String cor, int ano) { }
         var carro1 = new Carro("Audi", "preto", 2018);
         var carro2 = new Carro("Mercedes", "verde", 2022);
         var carro3 = new Carro("Porshe", "branco", 2021);
         var carro4 = new Carro("BMW", "preto", 2023);
-        List<Carro> l1 = new ArrayList<>(List.of(carro1, carro2, carro3, carro4));
+        List<Carro> carros = new ArrayList<>(List.of(carro1, carro2, carro3, carro4));
 
-        // List<Carro> filtrada = filtro(l1, new Predicate<Carro>() {
+        // List<Carro> filtrada = filtro(carros, new Predicate<Carro>() {
         //     @Override
         //     public boolean test(Carro car) {
         //         return car.marca.equals("Mercedes");
         //     }
         // });
-        
+
         // Predicate
-        List<Carro> filtrada = filtroPredicate(l1, carro -> carro.marca.equals("Mercedes"));
+        List<Carro> filtrada = filtroPredicate(carros, carro -> carro.marca().equals("Mercedes"));
         System.out.println(filtrada);
+
         // Consumer
-        forEach(filtrada, elem -> System.out.printf("%s %s %d%n", elem.marca, elem.cor, elem.ano));
+        forEach(filtrada, elem -> System.out.printf("%s %s %d%n", elem.marca(), elem.cor(), elem.ano()));
+
         // Function
-        List<String> coresCarro = map(l1, carro -> carro.cor());
-        forEach(coresCarro, cor -> System.out.printf("%s %n", cor));
+        // List<String> coresCarro = map(l1, carro -> carro.cor());
+        List<String> coresCarro = map(carros, Carro::cor); // Method reference
+        forEach(coresCarro, System.out::println);
     }
 
     public static <T> List<T> filtroPredicate(List<T> listaBruta, Predicate<T> predicate) {
