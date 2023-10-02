@@ -26,19 +26,25 @@ public class Streams {
          * map
          * flatMap: usado com listas aninhadas
          * 
-         * Operações finais: retornam void e o stream fecha.
+         * Operações finais: retornam algo sem ser um stream e o stream fecha.
          * count
          * min e max
          * all, any e noneMatch
          * findFirst, findAny
-         * 
+         * reduce:
          * collect(Collectors.)
          * Collectors:
          * toList, toSet
          * grupingBy: gera um mapa conforme a regra passada ex.: agrupar clientes por endereço
          * joining: apenas com strings
+         * 
+         * Uso: operações pequenas
+         * Debug: usar lambda em bloco; usar o método peek (apenas mostrar o que está acontecendo)
         */
 
-                
+        /*
+         * Fazer um exemplo que use vários métodos
+         * Ordenar um Map
+         */
     }
 }
