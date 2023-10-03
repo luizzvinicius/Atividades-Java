@@ -1,50 +1,46 @@
 package com.luiz.streams;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Streams {
     public static void main(String[] args) {
         record Hq(String title, double price) {}
-        List<Hq> revistas = new ArrayList<>(
-                List.of(new Hq("Batman", 5), new Hq("Superman", 5.54), new Hq("Iron man", 6.4)));
+        record Leitor(String nome, int idade) {}
+        List<Hq> quadrinhos = new ArrayList<>(
+                List.of(
+                        new Hq("Batman", 5), new Hq("Wonder woman", 5.54),
+                        new Hq("Iron man", 6.4), new Hq("Aquaman", 7.54),
+                        new Hq("Superman", 5.54), new Hq("Flash", 9))
+        );
+        
+        List<Leitor> leitores = new ArrayList<>(
+                List.of(
+                        new Leitor("Lucas", 10), new Leitor("Ana", 27),
+                        new Leitor("Pedro", 13), new Leitor("Ingridy", 19),
+                        new Leitor("Yasmin", 24), new Leitor("Mauricio", 40))
+        );
+        
+        // Ordenar um Map
+        Map<Leitor, Hq> quadrinhoFavorito = new HashMap<>();
+        for (int i = 0; i < quadrinhos.size(); i++) {
+            quadrinhoFavorito.put(leitores.get(i), quadrinhos.get(i));
+        }
 
-        /*
-         * Pipeline de dados com loops implícitos
-         * Operações intermediárias: que devolvem um stream e ainda pode aplicar métodos
-         * distinct(): não processar elementos repetidos (utiliza equals e hashCode)
-         * sorted
-         * skip(n): pula uma quantidade de elementos
-         * limit(n): quantos elementos para processar
-         * filter
-         * map
-         * flatMap: usado com listas aninhadas
-         * 
-         * Operações finais: retornam algo sem ser um stream e o stream fecha.
-         * count
-         * min e max
-         * all, any e noneMatch
-         * findFirst, findAny
-         * reduce:
-         * collect(Collectors.)
-         * Collectors:
-         * toList, toSet
-         * grupingBy: gera um mapa conforme a regra passada ex.: agrupar clientes por endereço
-         * joining: apenas com strings
-         * 
-         * Uso: operações pequenas
-         * Debug: usar lambda em bloco; usar o método peek (apenas mostrar o que está acontecendo)
-        */
-
-        /*
-         * Fazer um exemplo que use vários métodos
-         * Ordenar um Map
-         */
+        Map<Leitor, Hq> mapOrdenado = quadrinhoFavorito.entrySet().stream()
+        .sorted(Map.Entry.comparingByValue(Comparator.comparing(Hq::price).reversed()))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        
+        mapOrdenado.forEach((q1, q2) -> System.out.println(q1 + " " + q2));
+        
+        // agrupar
+        var leitoresMais18 = mapOrdenado.entrySet().stream()
+        .collect(Collectors.groupingBy(e -> e.getKey().idade > 18)); 
+        leitoresMais18.forEach((q1, q2) -> System.out.println(q1 + " " + q2));
     }
 }
