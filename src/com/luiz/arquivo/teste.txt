@@ -1,0 +1,12 @@
+create database Cantina;
+use Cantina;
+create table funcionario (
+    nome varchar(50),
+    email varchar(50),
+    senha varchar(50)
+);
+create table produto (
+    nome varchar(50),
+    preco Decimal(14,2),
+    descricao varchar(50)
+);
