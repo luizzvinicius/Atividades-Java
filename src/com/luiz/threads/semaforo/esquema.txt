@@ -1,0 +1,5 @@
+threads acessando um recurso
+1- Classe da thread contém atributo compartilhado
+2- Variáveis de controle da execução da thread
+3- Método syncronized que acessa o recurso compartilhado
+4- Usar métodos wait e notify e variável de controle quando acessar ou deixar o recurso compartilhado
