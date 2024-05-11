@@ -12,7 +12,7 @@ public class Join {
 
         try {
             thread1.t.join(); // Espera a execução da thread terminar
-            thread2.t.join(); // Se passar um tempo, espera esse tempo para executar a próxima ou executa a próxima thread depois desse tempo
+            thread2.t.join(); // Se passar tempo como parâmetro, espera esse tempo para executar a próxima ou executa a próxima thread depois desse tempo
             thread3.t.join();
         } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
