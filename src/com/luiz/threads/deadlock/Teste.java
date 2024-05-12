@@ -23,24 +23,22 @@ public class Teste {
             };
         };
 
-        var thread2 = new Thread("Thread #2") {
-            public void run() {
-                synchronized (RECURSO2) {
-                    System.out.println(Thread.currentThread().getName() + " acessando recurso 2");
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println(Thread.currentThread().getName() + " tentando recurso 1");
-                    synchronized (RECURSO1) {
-                        System.out.println(Thread.currentThread().getName() + " acessando recurso 1");
-                    }
+        Runnable r = () -> {
+            synchronized (RECURSO2) {
+                System.out.println(Thread.currentThread().getName() + " acessando recurso 2");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            };
+                System.out.println(Thread.currentThread().getName() + " tentando recurso 1");
+                synchronized (RECURSO1) {
+                    System.out.println(Thread.currentThread().getName() + " acessando recurso 1");
+                }
+            }
         };
 
         thread1.start();
-        thread2.start();
+        new Thread(r).start();
     }
 }
