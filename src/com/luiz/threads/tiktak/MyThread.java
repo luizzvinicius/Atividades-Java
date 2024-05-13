@@ -1,28 +1,27 @@
 package com.luiz.threads.tiktak;
 
 public class MyThread implements Runnable {
-    private String nome;
+    private TikTak tiktak;
     public Thread t;
-    private static Tiktak tiktak = new Tiktak();
 
-    public MyThread(String nome) {
-        this.nome = nome;
-        this.t = new Thread(this, nome);
-        this.t.start();
+    public MyThread(String nome, TikTak tt) {
+        this.tiktak = tt;
+        t = new Thread(this, nome);
+        t.start();
     }
 
     @Override
     public void run() {
-        if (t.getName().equalsIgnoreCase("tique")) {
+        if (t.getName().equalsIgnoreCase("Tik")) {
             for (int i = 0; i < 5; i++) {
-                tiktak.tique(true);
+                tiktak.tik(true);
             }
-            tiktak.tique(false);
-        } else if (t.getName().equalsIgnoreCase("taque")) {
+            tiktak.tik(false);
+        } else {
             for (int i = 0; i < 5; i++) {
-                tiktak.taque(true);
+                tiktak.tak(true);
             }
-            tiktak.taque(false);
+            tiktak.tak(false);
         }
     }
 }

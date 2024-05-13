@@ -1,48 +1,46 @@
 package com.luiz.threads.tiktak;
 
-public class Tiktak {
-    private boolean tique;
+public class TikTak {
 
-    public Tiktak() {
-        this.tique = true;
-    }
+	boolean tique;
 
-    // Só pode usar wait e notify em blocos sincronizados
-    public synchronized void tique(boolean estaExecutando) {
-        if (!estaExecutando) {
-            this.tique = false;
-            notify();
-            return;
-        }
-        System.out.println(Thread.currentThread().getName() + " Tique");
-        this.tique = true;
-        notify();
+	synchronized void tik(boolean estaExecutando) {
+		if (!estaExecutando) {
+			tique = true;
+			notify();
+			return;
+		}
 
-        while (tique) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		System.out.print("Tique ");
+		tique = true;
+		notify();
 
-    public synchronized void taque(boolean estaExecutando) {
-        if (!estaExecutando) {
-            this.tique = false;
-            notify();
-            return;
-        }
-        System.out.println(Thread.currentThread().getName() + " Taque");
-        this.tique = false;
-        notify();
+		try {
+			while (tique) {
+				wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
-        while (!this.tique) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	synchronized void tak(boolean estaExecutando) {
+		if (!estaExecutando) {
+			tique = false;
+			notify();
+			return;
+		}
+
+		System.out.println("Taque");
+		tique = false;
+		notify();
+
+		try {
+			while (!tique) {
+				wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
