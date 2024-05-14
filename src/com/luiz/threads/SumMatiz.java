@@ -5,21 +5,22 @@ import java.util.List;
 
 public class SumMatiz {
     public static void main(String[] args) {
+        // soma as linhas da matriz
         List<List<Integer>> matriz = new ArrayList<>(
             List.of(
-                    List.of(1, 2, 3, 4, 5),
-                    List.of(20, 7, 8, 9, 10),
-                    List.of(15, 7, 17, 7, 19),
-                    List.of(6, 54, 8, 9, 10),
-                    List.of(12, 7, 8, 25, 11)
+                List.of(1, 2, 3, 4, 5),
+                List.of(20, 7, 8, 9, 10),
+                List.of(15, 7, 17, 7, 19),
+                List.of(6, 54, 8, 9, 10),
+                List.of(12, 7, 8, 25, 11)
         ));
 
         for (int i = 0; i < matriz.size(); i++) {
-            new SumMatiz().new SomaThread(i + 1 + " Thread", matriz.get(i));
+            new SomaThread(i + 1 + " Thread", matriz.get(i));
         }
     }
 
-    class SomaThread implements Runnable {
+    static class SomaThread implements Runnable {
         private String nome;
         private List<Integer> array;
         private int soma;
