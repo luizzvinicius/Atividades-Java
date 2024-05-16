@@ -1,7 +1,6 @@
 package com.luiz.threads.concurrency;
 
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Lock;
 
 public class Reentrant {
     // Lock é uma interface | parâmetro fair tenta passar o lock para a thread mais ociosa
