@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.*;
 
-import javax.print.DocFlavor.STRING;
-
 public class Executor02 {
     public static void main(String[] args) throws InterruptedException {
         // Execução de tarefas programadas
