@@ -7,10 +7,26 @@ import java.util.concurrent.*;
 public class Executor02 {
     public static void main(String[] args) throws InterruptedException {
         // Execução de tarefas programadas
-        final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
-        final ExecutorService schedule2 = Executors.newFixedThreadPool(1);
+        ScheduledExecutorService schedule = null;
+        ExecutorService schedule2 = null;
 
-        beep(schedule, schedule2);
+        try {
+            schedule = Executors.newScheduledThreadPool(1);
+            schedule2 = Executors.newFixedThreadPool(1);
+            beep(schedule, schedule2);
+            schedule.shutdown();
+            schedule.awaitTermination(5, TimeUnit.SECONDS); // tempo máximo de execução após shutdown terminar
+        } catch (Exception e) {
+            System.out.println("Houve um erro nos executores");
+            e.printStackTrace();
+        } finally {
+            if (schedule != null && schedule2 != null) {
+                schedule.shutdownNow();
+                schedule2.shutdownNow();
+            }
+        }
+        // invokeAll(List): executar as tarefas no mesmo momento
+        // invokeAny: passa uma lista de tarefas, mas retorna apenas a que finalizou primeiro
     }
 
     private static void beep(final ScheduledExecutorService schedule, ExecutorService schedule2) {
@@ -23,7 +39,9 @@ public class Executor02 {
             }
             System.out.println(" Beep");
         };
-        // Espera a thread acordar para contar o delay
+        // Tempo de execução entre tarefas é fixo (delay)
+        // FixedRate executa a tarefa a cada x tempo (tempo informado)
+        // * Se a tarefa demorar mais que o tempo passado, o tempo da tarefa que dita
         ScheduledFuture<?> beep = schedule.scheduleWithFixedDelay(r, 0, 2, TimeUnit.SECONDS);
         // ScheduledFuture<?> beep2 = schedule.scheduleAtFixedRate(r, 0, 2, TimeUnit.SECONDS);
 
