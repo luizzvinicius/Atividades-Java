@@ -1,14 +1,14 @@
 package com.luiz.threads.ex_emails;
 
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
 
 public class Emails {
-
     public static class Membros {
-        private Queue<String> emails = new ArrayBlockingQueue<>(20, true);
+        private Queue<String> emails = new ArrayBlockingQueue<>(20);
+        private ReentrantLock l = new ReentrantLock();
+        private Condition condicao = l.newCondition();
         private boolean aberto;
 
         public Membros() {
@@ -19,46 +19,55 @@ public class Emails {
             return aberto;
         }
 
-        private synchronized int emailsNaFila() {
-            synchronized (this.emails) {
+        private int emailsNaFila() {
+            l.lock();
+            try {
                 return this.emails.size();
+            } finally {
+                l.unlock();
             }
         }
 
-        public synchronized void addEmail(String email) {
-            synchronized (this.emails) {
-                System.out.printf("%s adicionou email%n", Thread.currentThread().getName());
+        public void addEmail(String email) {
+            l.lock();
+            try {
                 this.emails.add(email);
-                notifyAll();
+                System.out.printf("%s adicionou email%n", Thread.currentThread().getName());
+                condicao.signal(); // Dizer que há emails pra enviar
+            } finally {
+                l.unlock();
             }
         }
 
-        public String getEmail() {
-            synchronized (this.emails) {
-                return this.emails.peek();
-            }
+        public synchronized String getEmail() {
+            return this.emails.peek();
         }
 
-        public void sendEmail() {
-            synchronized (this.emails) {
+        public void sendEmail() throws InterruptedException {
+            System.out.printf("%s verificando se há emails%n", Thread.currentThread().getName());
+            l.lock();
+            try {
                 while (this.emailsNaFila() == 0) {
                     if (!this.aberto) {
                         break;
                     }
-                    System.out.printf("%n%s Sem email%n", Thread.currentThread().getName());
-                    try {
-                        this.emails.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    System.out.printf("%s Sem emails para enviar%n", Thread.currentThread().getName());
+                    condicao.await();
                 }
                 this.emails.poll();
+            } finally {
+                l.unlock();
             }
         }
 
-        public synchronized void parar() {
-            this.aberto = false;
-            notifyAll();   
+        public void parar() {
+            l.lock();
+            try {
+                this.aberto = false;
+                condicao.signalAll();
+            } finally {
+                l.unlock();
+            }
         }
     }
 
@@ -70,13 +79,12 @@ public class Emails {
             while (mem.isAberto()) {
                 try {
                     String email = mem.getEmail();
-                    if (email == null) {
+                    if (email == null)
                         continue;
-                    }
                     mem.sendEmail();
                     TimeUnit.SECONDS.sleep(2);
                     System.out.printf("%n%s enviando email%n", Thread.currentThread().getName());
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -93,5 +101,7 @@ public class Emails {
             }
             mem.addEmail(email);
         }
+        System.out.println("Caixa de emails finalizada");
+        scan.close();
     }
 }
