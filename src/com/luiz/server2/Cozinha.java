@@ -16,32 +16,12 @@ public class Cozinha implements Serializable {
         this.mesas = new ArrayBlockingQueue<>(10, false);
     }
 
-    public void adicionarItem(Item item) {
-        this.itens.offer(item);
-    }
-
-    public void adicionarMesa(Mesa mesa) {
-        this.mesas.offer(mesa);
-    }
-
-    public ArrayBlockingQueue<Mesa> getMesas() {
-        return mesas;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public ArrayBlockingQueue<Item> getItens() {
-        return itens;
-    }
-
     public void diminuirQuantidade(int codItem, int qtd) {
-        for (Item i : this.itens) {
+        this.itens.forEach(i -> {
             if (i.getCodigo() == codItem) {
                 i.diminuirQuantidade(qtd);
             }
-        }
+        });
     }
 
     public Mesa excluirMesa(String nome) {
@@ -54,5 +34,25 @@ public class Cozinha implements Serializable {
             }
         }
         return mesa;
+    }
+
+    public void adicionarItem(Item item) {
+        this.itens.offer(item);
+    }
+
+    public void adicionarMesa(Mesa mesa) {
+        this.mesas.offer(mesa);
+    }
+
+    public ArrayBlockingQueue<Mesa> getMesas() {
+        return mesas;
+    }
+
+    public ArrayBlockingQueue<Item> getItens() {
+        return itens;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }

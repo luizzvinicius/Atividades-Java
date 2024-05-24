@@ -33,6 +33,6 @@ public class Item implements Serializable {
     }
 
     public void diminuirQuantidade(int qtd) {
-        this.quantidade = this.quantidade - qtd;
+        this.quantidade -= qtd;
     }
 }
