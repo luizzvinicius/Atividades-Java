@@ -39,10 +39,7 @@ public class Servidor {
                     switch (opt) {
                         case 0 -> cadastrarItem(utils);
                         case 1 -> listarMesas();
-                        case 2 -> {
-                            parar = true;
-                            exec.shutdown();
-                        }
+                        case 2 -> encerrar(exec);
                     }
                 }
             } catch (Exception e) {
