@@ -41,7 +41,7 @@ public class Utils implements AutoCloseable {
         }
     }
 
-    private int lerInt(String msg) {
+    public int lerInt(String msg) {
         while (true) {
             System.out.print(msg);
             var num = this.scan.nextLine().strip();
