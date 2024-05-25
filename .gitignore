@@ -1,7 +1,6 @@
 # Compiled class file
 *.class
 bin
-
 # Log file
 *.log
 
@@ -11,6 +10,9 @@ bin
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 .vscode
+.idea
+out/
+*.iml
 
 # Package Files #
 *.war
