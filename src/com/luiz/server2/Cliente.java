@@ -1,28 +1,31 @@
 package com.luiz.server2;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.stream.Collectors;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Cliente implements AutoCloseable {
     private Mesa mesa;
     private ArrayBlockingQueue<Item> itens = null;
-    private List<Item> itensConsumidos = new ArrayList<>();
     private boolean parar;
     private Socket client;
     private DataOutputStream saida;
     private ObjectOutputStream saidaObj;
     private ObjectInputStream entradaObj;
-    private final String[] opcoes = new String[] { "Cadastrar mesa", "Listar itens", "Adicionar item", "Fechar conta",
-            "Sair do programa" };
+    private final String[] opcoes = new String[]{"Cadastrar mesa", "Listar itens", "Adicionar item", "Fechar conta", "Sair do programa"};
 
     public static void main(String[] args) {
         try (var client = new Cliente()) {
             client.start();
         } catch (Exception e) {
-            System.out.println("Erro ao inicar cliente: " + e.getMessage());
+            System.out.printf("Erro ao inicar cliente: %s%n", e.getMessage());
         }
     }
 
@@ -36,7 +39,7 @@ public class Cliente implements AutoCloseable {
 
     @SuppressWarnings("unchecked")
     private void messageLoop() {
-        try (var utils = new Utils();) {
+        try (var utils = new Utils()) {
             var exec = Executors.newScheduledThreadPool(1);
             exec.scheduleAtFixedRate(() -> {
                 if (mesa != null) {
@@ -56,9 +59,9 @@ public class Cliente implements AutoCloseable {
                 int opt = utils.lerOption("Sua opção: ", 1, opcoes.length, "inválido");
                 switch (opt) {
                     case 0 -> cadastrarMesa(utils, saida, saidaObj);
-                    case 1 -> listarItens(entradaObj, saida);
-                    case 2 -> adicionarItem(utils, entradaObj, saida);
-                    case 3 -> fecharConta(utils, entradaObj, saida);
+                    case 1 -> listarItens();
+                    case 2 -> adicionarItem(utils, saida);
+                    case 3 -> fecharConta(entradaObj, saida);
                     case 4 -> close();
                 }
             }
@@ -78,39 +81,35 @@ public class Cliente implements AutoCloseable {
         saidaObj.writeObject(this.mesa);
     }
 
-    public void listarItens(ObjectInputStream entradaObj, DataOutputStream saida) throws IOException, ClassNotFoundException {
+    public void listarItens() {
         verificaMesa();
         verificaItens();
-        this.itens.stream()
-                .forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade: %d %n", i.getCodigo(), i.getNome(),
-                        i.getPreco(), i.getQuantidade()));
+        this.itens.forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade: %d %n", i.getCodigo(), i.getNome(), i.getPreco(), i.getQuantidade()));
         System.out.println();
     }
 
-    public void adicionarItem(Utils utils, ObjectInputStream entradaObj, DataOutputStream saida) throws IOException {
+    public void adicionarItem(Utils utils, DataOutputStream saida) throws IOException {
         verificaMesa();
         verificaItens();
-        this.itens.stream().forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade: %d %n", i.getCodigo(), i.getNome(), i.getPreco(), i.getQuantidade()));
+        this.itens.forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade: %d %n", i.getCodigo(), i.getNome(), i.getPreco(), i.getQuantidade()));
         var codItem = utils.lerOption("\nDigite o código do Item: ", 1, this.itens.size(), "Item inexistente") + 1;
-        Item itemSelecionado = this.itens.stream().filter(i -> i.getCodigo() == codItem).collect(Collectors.toList()).getFirst();
+        Item itemSelecionado = this.itens.stream().filter(i -> i.getCodigo() == codItem).toList().getFirst();
         var qtd = utils.lerOption("Digite a quantidade: ", 1, itemSelecionado.getQuantidade(), "Quantidade inválida") + 1;
-        this.itensConsumidos.add(new Item(itemSelecionado.getNome(), itemSelecionado.getPreco(), qtd));
+        this.mesa.adicionaItem(itemSelecionado.getNome(), itemSelecionado.getPreco(), qtd);
         saida.writeInt(2);
         saida.writeUTF(codItem + " " + qtd);
     }
 
-    public void fecharConta(Utils utils, ObjectInputStream entradaObj, DataOutputStream saida) throws Exception {
+    public void fecharConta(ObjectInputStream entradaObj, DataOutputStream saida) throws Exception {
         verificaMesa();
         verificaItens();
-        var totalConta = this.itensConsumidos.stream()
-                .map(i -> i.getPreco() * i.getQuantidade()).reduce(0d, (i, ii) -> i + ii);
-        this.itensConsumidos.stream()
-                .forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade disponível: %d %n", i.getCodigo(), i.getNome(), i.getPreco(), i.getQuantidade()));
+        var totalConta = this.mesa.totalConta();
+        this.mesa.mostraItens();
         System.out.printf("%nTotal da conta foi de R$ %.2f%n", totalConta);
 
         saida.writeInt(3);
         saida.writeUTF(this.mesa.getNomeCliente());
-        var tempoPermanencia = (long) entradaObj.readObject();
+        var tempoPermanencia = ChronoUnit.MINUTES.between(LocalTime.parse(this.mesa.getHorarioEntrada()), LocalTime.now());
         System.out.printf("Você ficou no restaurante por %d minutos%n", tempoPermanencia);
         close();
     }

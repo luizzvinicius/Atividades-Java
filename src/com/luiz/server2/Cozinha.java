@@ -1,8 +1,6 @@
 package com.luiz.server2;
 
 import java.io.Serializable;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class Cozinha implements Serializable {
@@ -28,7 +26,6 @@ public class Cozinha implements Serializable {
         Mesa mesa = null;
         for (Mesa m : this.mesas) {
             if (m.getNomeCliente().equals(nome)) {
-                m.setHorarioSaida(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss")));
                 mesa = m;
                 this.mesas.remove(m);
             }

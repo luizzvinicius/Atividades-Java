@@ -1,9 +1,7 @@
 package com.luiz.server2;
 
-import java.net.Socket;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.io.*;
+import java.net.Socket;
 
 public class LidarClientes {
     private final Socket socket;
@@ -28,34 +26,34 @@ public class LidarClientes {
             // System.out.println("Opt: " + opt);
             switch (opt) {
                 case 0 -> cadastrarMesa();
-                case 1 -> listarItens();                    
-                case 2 -> adicionarItem();                    
-                case 3 -> excluirItem();                    
+                case 1 -> listarItens();
+                case 2 -> adicionarItem();
+                case 3 -> excluirMesa();
                 case 4 -> encerrarConexao();
             }
             return opt;
         } catch (IOException e) {
-            System.out.println("erro ao pegar mensagem: " + e.getStackTrace().toString());
+            System.out.printf("Erro ao pegar mensagem: %s%n", e.getMessage());
             return -1;
         }
     }
 
-    public boolean sendMessage() {
-        try {
-            this.saida.writeInt(getMessage());
-            return true;
-        } catch (IOException e) {
-            System.out.println("Erro ao enviar mensagem: " + e.getMessage());
-            return false;
-        }
-    }
+//    public boolean sendMessage() {
+//        try {
+//            this.saida.writeInt(getMessage());
+//            return true;
+//        } catch (IOException e) {
+//            System.out.printf("Erro ao enviar mensagem: %s%n", e.getMessage());
+//            return false;
+//        }
+//    }
 
     public void cadastrarMesa() {
         try {
             var mesa = (Mesa) entradaObj.readObject();
             LidarClientes.cozinha.adicionarMesa(mesa);
         } catch (IOException | ClassNotFoundException e) {
-            System.out.printf("Não foi possível ler mesa");
+            System.out.println("Não foi possível ler mesa");
         }
     }
 
@@ -69,15 +67,13 @@ public class LidarClientes {
         cozinha.diminuirQuantidade(Integer.parseInt(codAndQtd[0]), Integer.parseInt(codAndQtd[1]));
     }
 
-    public void excluirItem() throws IOException {
+    public void excluirMesa() throws IOException {
         var nomeCliente = entrada.readUTF();
         Mesa m = cozinha.excluirMesa(nomeCliente);
-        long tempoPernencia = ChronoUnit.MINUTES.between(LocalTime.parse(m.getHorarioSaida()), LocalTime.parse(m.getHorarioEntrada()));
-        this.saidaObj.writeObject(tempoPernencia);
     }
 
     public void encerrarConexao() {
-        System.out.println("Cliente encerrou conexão");    
+        System.out.println("Cliente encerrou conexão");
         this.close();
     }
 

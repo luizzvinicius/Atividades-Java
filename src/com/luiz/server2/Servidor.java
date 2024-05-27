@@ -1,15 +1,16 @@
 package com.luiz.server2;
 
-import java.io.*;
-import java.util.concurrent.*;
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Servidor {
     private ServerSocket server;
     private boolean parar;
     private final Cozinha cozinha = new Cozinha("IFAL");
-    private final String[] opcoes = new String[] { "Cadastrar item", "Listar mesas", "Encerrar cozinha" };
-    static final String[] ClientOptions = new String[] { "Cadastrar Mesa", "Enviar itens", "Adicionar Item", "Fechar conta" };
+    private final String[] opcoes = new String[]{"Cadastrar item", "Listar mesas", "Encerrar cozinha"};
+    static final String[] ClientOptions = new String[]{"Cadastrar Mesa", "Enviar itens", "Adicionar Item", "Fechar conta"};
 
     public static final int PORT = 8000;
 
@@ -81,9 +82,7 @@ public class Servidor {
             System.out.println("Nenhuma mesa cadastrada");
             return;
         }
-        mesas.stream()
-        .forEach(mesa -> System.out.printf("Nome: %s | Entrada: %s | Total: %.2f%n",
-        mesa.getNomeCliente(), mesa.getHorarioEntrada(), mesa.getTotalConta()));
+        mesas.forEach(mesa -> System.out.printf("Nome: %s | Entrada: %s | Total: %.2f%n", mesa.getNomeCliente(), mesa.getHorarioEntrada(), mesa.getTotalConta()));
     }
 
     public void encerrar(ExecutorService exec) throws IOException {

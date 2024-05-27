@@ -1,9 +1,10 @@
 package com.luiz.server2;
 
-import java.util.*;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mesa implements Serializable {
     private final String nomeCliente;
@@ -18,6 +19,18 @@ public class Mesa implements Serializable {
         this.itens = new ArrayList<>();
     }
 
+    public void adicionaItem(String nome, double preco, int quantidade) {
+        this.itens.add(new Item(nome, preco, quantidade));
+    }
+
+    public void mostraItens() {
+        this.itens.forEach(i -> System.out.printf("Código: %d, %s %.2f Quantidade disponível: %d %n", i.getCodigo(), i.getNome(), i.getPreco(), i.getQuantidade()));
+    }
+
+    public double totalConta() {
+        return this.itens.stream().map(i -> i.getPreco() * i.getQuantidade()).reduce(0d, (i, ii) -> i + ii);
+    }
+
     public String getNomeCliente() {
         return this.nomeCliente;
     }
@@ -26,30 +39,7 @@ public class Mesa implements Serializable {
         return this.horarioEntrada;
     }
 
-    public String getHorarioSaida() {
-        return this.horarioSaida;
-    }
-
     public double getTotalConta() {
         return this.totalConta;
-    }
-
-    public void setHorarioSaida(String horarioSaida) {
-        this.horarioSaida = horarioSaida;
-    }
-
-    public void adicionarTotalConta(double preco) {
-        this.totalConta = preco;
-    }
-
-    public List<Item> getItens() {
-        return itens;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Mesa [nomeCliente=").append(nomeCliente).append(", totalConta=").append(totalConta).append("]");
-        return builder.toString();
     }
 }
