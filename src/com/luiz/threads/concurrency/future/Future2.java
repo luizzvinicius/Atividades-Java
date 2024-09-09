@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 public class Future2 {
     public static void main(String[] args) {
         // Utiliza umma forma diferente de criar threads
+        // mt usado segundo a Fê
         System.out.println("Solicitando preço das lojas...");
         CompletableFuture<Integer> result = geraPreco();
         CompletableFuture<Integer> result2 = geraPreco();
